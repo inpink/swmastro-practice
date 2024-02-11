@@ -223,7 +223,181 @@ A. 여기서 DISTINCT는 USER_ID에만 영향을 줍니다. (괄호되어 있으
 
 
 ***
+https://school.programmers.co.kr/learn/courses/30/lessons/59411
+Q. inner join, left join, right join, cross join, self join에 대해 코드를 통해 자세히 설명
 
+A. SQL 조인은 두 개 이상의 테이블에서 열을 기반으로 데이터를 결합하는 데 사용됩니다. 여기에는 여러 유형의 조인이 있으며, 각각은 특정한 사용 사례에 적합합니다. 아래에서는 `INNER JOIN`, `LEFT JOIN`, `RIGHT JOIN`, `CROSS JOIN`, `SELF JOIN`에 대해 설명하고 각각에 대한 코드 예시를 제공합니다.
+
+### INNER JOIN
+
+`INNER JOIN`은 두 테이블 모두에 존재하는 행만 반환합니다. 즉, 조인 조건을 만족하는 행만 결과에 포함됩니다.
+
+```sql
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+```
+
+이 쿼리는 `Orders` 테이블과 `Customers` 테이블을 `CustomerID`에 따라 결합하고, 두 테이블 모두에서 일치하는 `CustomerID`를 가진 주문의 ID와 고객 이름을 반환합니다.
+
+### LEFT JOIN (LEFT OUTER JOIN)
+
+`LEFT JOIN` (또는 `LEFT OUTER JOIN`)은 왼쪽 테이블의 모든 행과 오른쪽 테이블에서 조인 조건과 일치하는 행을 반환합니다. 조인 조건과 일치하지 않는 왼쪽 테이블의 행은 결과에 포함되지만, 오른쪽 테이블의 해당 필드는 NULL로 표시됩니다.
+
+```sql
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+LEFT JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+```
+
+이 쿼리는 모든 주문과, 해당 주문과 일치하는 고객 이름을 반환합니다. 일치하는 고객이 없는 주문의 경우, `CustomerName`은 NULL이 됩니다.
+
+### RIGHT JOIN (RIGHT OUTER JOIN)
+
+`RIGHT JOIN` (또는 `RIGHT OUTER JOIN`)은 `LEFT JOIN`의 반대로, 오른쪽 테이블의 모든 행과 왼쪽 테이블에서 조인 조건과 일치하는 행을 반환합니다.
+
+```sql
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+RIGHT JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+```
+
+이 쿼리는 모든 고객과, 해당 고객의 주문 ID를 반환합니다. 일치하는 주문이 없는 고객의 경우, `OrderID`는 NULL이 됩니다.
+
+### CROSS JOIN
+
+`CROSS JOIN`은 두 테이블 간의 모든 가능한 조합을 생성합니다. 조인 조건을 지정하지 않습니다.
+
+```sql
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+CROSS JOIN Customers;
+```
+
+이 쿼리는 `Orders` 테이블의 모든 주문과 `Customers` 테이블의 모든 고객 간의 모든 조합을 반환합니다.
+
+### SELF JOIN
+
+`SELF JOIN`은 테이블을 자기 자신과 조인하는 것입니다. 이를 통해 같은 테이블 내의 관련된 행들을 비교하거나 조합할 수 있습니다. `SELF JOIN`을 수행할 때는 테이블에 별칭을 사용하여 같은 테이블을 참조합니다.
+
+```sql
+SELECT A.CustomerName AS CustomerName1, B.CustomerName AS CustomerName2
+FROM Customers AS A, Customers AS B
+WHERE A.CustomerID <> B.CustomerID;
+```
+
+이 쿼리는 `Customers` 테이블 내의 모든 고객 간의 가능한 조합을 반환합니다. 단, 같은 고객의 조합은 제외합니다.
+
+### 테이블 예시
+
+1. `Employees` 테이블:
+
+| EmployeeID | EmployeeName | DepartmentID |
+|------------|--------------|--------------|
+| 1          | John Doe     | 1            |
+| 2          | Jane Smith   | 2            |
+| 3          | Anne Brown   | NULL         |
+
+2. `Departments` 테이블:
+
+| DepartmentID | DepartmentName |
+|--------------|----------------|
+| 1            | HR             |
+| 2            | IT             |
+| 3            | Finance        |
+
+### INNER JOIN 예시
+
+```sql
+SELECT Employees.EmployeeName, Departments.DepartmentName
+FROM Employees
+INNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+
+**결과**:
+
+| EmployeeName | DepartmentName |
+|--------------|----------------|
+| John Doe     | HR             |
+| Jane Smith   | IT             |
+
+### LEFT JOIN 예시
+
+```sql
+SELECT Employees.EmployeeName, Departments.DepartmentName
+FROM Employees
+LEFT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+
+**결과**:
+
+| EmployeeName | DepartmentName |
+|--------------|----------------|
+| John Doe     | HR             |
+| Jane Smith   | IT             |
+| Anne Brown   | NULL           |
+
+### RIGHT JOIN 예시
+
+```sql
+SELECT Employees.EmployeeName, Departments.DepartmentName
+FROM Employees
+RIGHT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+
+**결과**:
+
+| EmployeeName | DepartmentName |
+|--------------|----------------|
+| John Doe     | HR             |
+| Jane Smith   | IT             |
+| NULL         | Finance        |
+
+### CROSS JOIN 예시
+
+```sql
+SELECT Employees.EmployeeName, Departments.DepartmentName
+FROM Employees
+CROSS JOIN Departments;
+```
+
+**결과** (일부만 표시):
+
+| EmployeeName | DepartmentName |
+|--------------|----------------|
+| John Doe     | HR             |
+| John Doe     | IT             |
+| John Doe     | Finance        |
+| Jane Smith   | HR             |
+| ...          | ...            |
+
+### SELF JOIN 예시
+
+`Employees` 테이블을 사용하여 같은 부서에 속한 직원들의 조합을 찾습니다.
+
+```sql
+SELECT A.EmployeeName AS EmployeeName1, B.EmployeeName AS EmployeeName2
+FROM Employees A, Employees B
+WHERE A.DepartmentID = B.DepartmentID AND A.EmployeeID <> B.EmployeeID;
+```
+
+**결과**: 이 예시에서는 각 직원의 조합이 같은 부서 내에서만 생성됩니다. 하지만 주어진 데이터에는 동일 부서 내에서 둘 이상의 직원이 없으므로, 결과는 비어 있습니다.
+
+
+***
+
+문자열
+![img.png](img.png)
+![img_1.png](img_1.png)
+출처 : https://yeahvely.tistory.com/89
+
+***
+
+UNION
+![img_2.png](img_2.png)
+https://silverji.tistory.com/49
+
+***
 정규표현식도 몇 개 외우기
 
 

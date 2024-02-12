@@ -398,6 +398,25 @@ UNION
 https://silverji.tistory.com/49
 
 ***
+
+Q. mysql case문
+
+A. 
+```commandline
+SELECT EmployeeID, Salary,
+CASE
+    WHEN Salary <= 30000 THEN Salary * 0.15
+    WHEN Salary <= 50000 THEN Salary * 0.10
+    ELSE Salary * 0.05
+END AS Bonus
+FROM Employees;
+
+```
+
+
+
+***
+
 정규표현식도 몇 개 외우기
 
 

@@ -221,7 +221,127 @@ def find(x):
 
 ***
 
+### [MST]
+
+[ 최소 신장 트리 (minimum spanning tree, MST) ]
+
+최소 신장 트리 : 주어진 그래프의 모든 정점들을 연결하는 부분 그래프 중에서 가중치의 합이 최소인 트리
+
+구하는 방법은 크게 3가지가 있다.
+
+1) 크루스칼(Kruscal) : 가장 대중적인 방법
+
+2) 프림(Prim)
+
+3) 다익스트라(Dijkstra)
+   (모든 다익스트라가 MST라는 게 아니라, MST를 구하는 방법 중 다익스트라가 있는 것)
+
+### [크루스칼 알고리즘]
+
+: 크루스칼 알고리즘은 '그리디' 알고리즘의 일종이다.  MST를 구현하는 대표적인 방법이다.
+
+
+
+1) 가중치 기준으로 오름차순 정렬
+
+2) 정렬된 순서대로, 앞에서부터 선택하여 두 정점을 이어줌. (연결했다면 weight를 담아준다)
+
+3) 선택할 때, 만약 사이클이 형성된다면, 선택하지 않음 (사이클이 형성된다는 것은, 이미 선택하려는 간선의 두 정점이 ★같은 집합★에 있다(=★같은 집합은 같은 root이도록 표시함★)라는 것
+=> Union-Find 사용
+
+4) 모든 간선에 대해 2,3번을 반복한다!
+~~~
+v, e = map(int, input().split()) #v는 1부터 v까지 정점 번호, e는 간선 개수
+Glist = [] #그래프 정보를 담아줄 리스트
+for i in range(e): #그래프 정보(간선,가중치) 입력받아서 Elist에 저장
+    a,b,c=map(int, input().split())
+    Glist.append([c,a,b]) #sort를 위해 가중치를 맨 앞에
+
+Glist.sort() #★가중치 기준으로 정렬 ⭐
+#print(Glist)
+
+def find(x): #★진짜 부모를 찾아 update하고 반환해주는 함수!
+    if x!=Vroot[x]: #자기 자신이 root이면 그냥 자기 자신 정점을 루트로서 반환해주고, ★그렇지 않다면 '재귀'를 통해 진짜루트를 찾아서 반환한다. 
+        Vroot[x]=find(Vroot[x])  #따로 따로 만들어지고, 나중에 합쳐지는 경우에 큰 집합 2개가 1개로 연결되어 부모 update해줄 일이 있다. 
+        #부모를 찾는 동시에, 재귀를 이용하여 update까지 함(최적화)
+    return Vroot[x] 
+
+Vroot = [i for i in range(v+1)] #각 정점의 root를 담아주는 리스트. ★root가 같다면, 같은 집합이다!★
+#초기값은 정점 자기 자신 번호로(자기 자신이 root라 가정=★자기 자신만 담긴 집합 1개씩으로 배정★) 
+
+ans=0
+for w,a,b in Glist: #* ⭐ 2차원 리스트 값 편하게 꺼내 쓰는 방법, 모든 간선에 대해 검사. 
+    #print(a,b,w) #2차원 리스트 요소 하나하나 꺼내져 나옴
+    #print("시작",Vroot)
+    aRoot=find(a) #간선으로 이어진 두 정점의 '진짜' root를 구한다.  
+    bRoot=find(b)
+    #print(aRoot,bRoot,'a',Vroot)
+    if aRoot!=bRoot:  #서로 다른 root를 가지고 있다면(=서로 다른 집합에 속한다), 둘 중 하나의 집합을 탈락시키고 나머지 하나의 집합으로 편입된다.
+        Vroot[bRoot]=aRoot #그냥 a번 정점을 root로 차곡차곡 담기. 
+        ans+=w #간선 선택했으니까 weight 담기
+    #print(Vroot)
+    #print()
+print(ans)
+~~~
+
+***
+
 ### [다익스트라]
+- k번 정점부터 모든 정점까지의 각 최소거리.
+- 더 효율적인 탐색을 위해 "힙"을 사용
+- 다익스트라는 크루스칼과 다르다! 힙을 사용하는게, 크루스칼처럼 시작점 무관 최소값을 구하는 게 아니라,
+  ⭐ 시작점에서부터 이어지는 경로의 최소값을 구하는 것이다!
+- ⭐ heapq는 기본적으로 작은 값을 먼저 뽑는다. 
+- ⭐ 다익스트라로는 최대경로(A-B-C든 A-C든, A->C를 위해 거치는 모든 경로들의 비용합)를 구할 수 없다!! 
+  다익스트라는 최소 비용 경로를 구하기 위한 알고리즘이다. 
+  * 최대경로를 구하기 위해 더 큰 값을 dp에 담는다면, 계속해서 사이클을 돌며 더 많은 경로를 담으면 되니까 무한에서 빠져나오지 못한다
+  * 이럴 경우 다른 알고리즘을 생각하는 게 백번 옳다
+
+~~~
+import sys
+input = sys.stdin.readline
+
+import heapq #최솟값을 빠르게 꺼내기 위해 최소 힙써야함
+
+v,e=map(int,input().split())
+graph=[ [] for i in range(v+1)]
+k=int(input()) #시작점
+dp=[200001 for i in range(v+1)] #최댓값 20만
+heap=[] ⭐
+for i in range(e):
+    a,b,c=map(int,input().split())
+    graph[a].append([b,c]) 
+
+def dijkstra(k): #시작 정점번호 k
+    #시작 정점번호 넣은 상태로 시작
+    dp[k]=0 
+    heapq.heappush(heap,(0,k)) ⭐
+    #print("시작:",(0,k),dp)
+
+    while True: #메인
+        if len(heap)==0:
+            break
+        weight,node=heapq.heappop(heap) #최소값 꺼냄!
+        
+        for next_node,next_weight in graph[node]: #현재 정점에서 연결된 모든 노드에 대해 검사! 이렇게 for문 쓰는 방법 잘 기억해두기.
+            next_weight+=weight
+            
+            if next_weight<dp[next_node]: #dp를 업데이트 시켜주는 경우
+                dp[next_node]=next_weight #시작정점 k에서부터
+                heapq.heappush(heap,(next_weight,next_node))
+                #print("push:",(next_weight,next_node))
+
+        
+dijkstra(k) #데이크스트라 실행
+for i in range(1,v+1):
+    if dp[i]==200001:
+        print("INF")
+    else:
+        print(dp[i])
+~~~
+
+### [Floyd-Warshall]
+모든 정점에서 모든 정점까지의 각 최소거리
 
 
 ***
@@ -300,3 +420,11 @@ def find(x):
 - 문자열
   - 문자.count("a")  # a 개수 찾아 반환 (없음 0개 )
   - 문자.find("a")  # a 위치 찾아 반환 (없으면 -1 반환)
+
+
+- import sys
+  - input = sys.stdin.readline()
+    -  입력 시 뒤에 \n이 붙는다 
+  - sys.maxsize
+    - 2**63-1과 같은 값
+    - 파이썬에서는 다른 언어와 다르게 크기 제한이 없긴 하다. 따라서 최솟값은 -sys.maxsize를 이용하자. 

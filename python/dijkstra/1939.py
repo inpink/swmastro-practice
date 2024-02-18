@@ -6,44 +6,46 @@ n,m=map(int,input().split())
 maxValue=sys.maxsize
 #print(min)
 
-graph=[[maxValue for i in range(n+1)] for i in range(n+1)]
+# ⭐ n이 1만이라, 1만x1만=1억 개만큼 미리 만들어두면 메모리 초과!!!!
+# 10만개의 간선을 넣어주는게 메모리적으로 더 효율적!
+graph=[[] for i in range(n+1)]
 
 
 for i in range(m):
     a,b,c=map(int,input().split())
-    #c*=-1
-    if (graph[a][b]>c):
-        graph[a][b]=c
-    if (graph[b][a]>c):
-        graph[b][a]=c
+    graph[a].append((b,c))
+    graph[b].append((a,c))
 
-for i in graph:
-    print(i)
+#for i in graph:
+    #print(i)
 
 start,end=map(int,input().split())
 
 # 다익스트라
 heap=[]
-dp=[maxValue for i in range(n+1)]
-heapq.heappush(heap, (0,start))
-print(dp)
-dp[start]=0
+dp=[0 for i in range(n+1)]
+heapq.heappush(heap, (-maxValue,start))
+#print(dp)
 while True:
     if len(heap)==0:
         break
 
     cost, node = heapq.heappop(heap)
 
-    for i in range(1,n+1):
-        if (graph[node][i])!=maxValue:
-            nextCost =graph[node][i]+cost
-            if dp[i]>nextCost:
-                dp[i]=nextCost
-                heapq.heappush(heap,(nextCost,i))
-    print("dp:",dp, heap)
+    if node==end: # 큰 것부터 뽑고, 각 연산에서 min값을 구하므로 먼저 도착했을 때가 항상 최댓값
+        break
 
+    for arriveNode, arriveCost in graph[node]:
+        nextCost =-min(arriveCost,-cost)
+        if dp[arriveNode]>nextCost:
+            dp[arriveNode]=nextCost
+            heapq.heappush(heap,(nextCost,arriveNode))
+    #print("dp:",dp, heap)
+
+print(-dp[end])
 '''
-문제를 제대로 읽자
+문제를 제대로 읽자!!!! 경로들의 cost 합이 아니라, 
+여러 경로를 거친다면 경로들 중 최솟값이다.
 
 
 N(2 ≤ N ≤ 10,000)개의 섬
@@ -56,10 +58,12 @@ N(2 ≤ N ≤ 10,000)개의 섬
  마지막 줄에는 공장이 위치해 있는 섬의 번호를 나타내는 서로 다른 두 정수가 주어진다.
  공장이 있는 두 섬을 연결하는 경로는 항상 존재하는 데이터만 입력으로 주어진다.
  
- 4 4
- 1 2 1
- 1 3 2
- 2 3 2
- 3 4 1
- 1 4
+4 4
+1 2 1
+1 3 2
+2 3 2
+3 4 1
+1 3
+
+ x -2 -2 -1
 '''

@@ -223,9 +223,12 @@ def find(x):
 - bfs
   -  dfs, bfs 둘 다 쓸 수 있으 bfs가 나은 것 같기도?
   - https://www.acmicpc.net/problem/13549 
-    -  bfs는 모든 간선의 가중치가 같은 경우에만 가능하다.
-    - visited를 쓰기 때문이다. 
-    - 그냥 
+    -  "0-1 bfs"
+      -  bfs는 모든 간선의 가중치가 같은 경우에만 가능하다.
+      - visited를 쓰기 때문이다. 
+      - 따라서 가중치가 0,1 서로 다른 경우는 이를 쓸 것
+      - 0-1 bfs의 확장판이 "다익스트라"인 느낌. 여기에 내가 잘 정리해뒀다
+      - https://blog.naver.com/inpink_/223359589175
 
 ***
 

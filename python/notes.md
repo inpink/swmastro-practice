@@ -94,6 +94,8 @@
 - 중첩 반복문 쓸 때 반복문 변수 주의하기
 - 구현 코드가 길어질수록 변수 오타 없는지 여러 번!! 꼼꼼히 확인할 것
 - 가급적 복붙하지 말고 직접 타이핑하기! 복붙하면서 안바꾸는 변수때문에 틀리기 쉬워서 그럼!
+
+
 ***
 
 푼 문제
@@ -229,6 +231,47 @@ def find(x):
   - 당연히, 데이터에 따라 달라짐
   - 그리고 재귀 깊이를 너무 크게하면 메모리 초과가 발생할 수 있기에, 적절한 수치를 찾아야함
 
+- 백트래킹
+  -  먼저 방문한 곳이 항상 최적이 아니다 => bfs, 다익스트라 사용 불가능!!! => 백트래킹 꼭 필요!!!
+     (물론 시간 상관 안한다면, 가능한 모든 케이스를 다 anslist에 담아두고 sort()한 뒤 0번째 값을 구하면
+     이게 사전상 가장 빠른 정답임. 결국 내가 짠 코드가 시간 상으로는 몇십배 효율적이긴 함.  ) 
+  - https://school.programmers.co.kr/learn/courses/30/lessons/43164#
+  - ⭐️ 프로그래머스처럼 def로만 이루어진 환경에서는 전역변수 지양하자.
+    만약 전역변수 사용하지 않는다면, ""백트래킹 할 때 다음과 같은 코드들이 필요함. 1) 종료조건에서 정답 return, 2) 종료조건이 최초의 dfs가 아닐 수 있으므로, 이를 호출한 많은 재귀들에서 ans= dfs(ticketSize,graph,indexNameMap,visited,newRoute,nextCountry)
+    if ans:
+    return ans
+3) 처음으로 탐색한 dfs에서 정답이 나오지 않는 경우, None을 반환해서 정답이 없음을 이전의 재귀에게 알려줘야 한다. for문 밑에 맨 밑에 return None적으면 됨
+   a -> b -> ...정답없음 -> b에서는 None 반환
+   -> a에서 b는 답이없다는 걸 확인하고 다음 단계인 -> c 탐색 ... 정답 찾아 반환
+4) 이 문제에서는 항상 정답만 있다 했으니 최초 dfs를 호출한 곳(solution)에서는 정답 받아 반환하면 됨
+~~~
+def solution(tickets):
+    ... 생략
+    
+    visited=[False for i in range(ticketSize)]
+    route=[indexNameMap[start]]
+    answer = dfs(ticketSize,graph,indexNameMap,visited,route,start)  # ⭐️
+    return answer
+
+ # ⭐️ Solution 내부에 이거 두면 매개변수를 줄여줄 순 있을듯...
+def dfs(ticketSize,graph,indexNameMap,visited,route,curCountry): #dfs 백트래킹
+    if len(route)==ticketSize+1: #종료 조건
+        return route # ⭐️ 
+    print(visited,route,curCountry)
+       
+    for nextCountry,nextTicket in graph[curCountry]:
+        
+        if visited[nextTicket]==False:
+            newRoute=route+[indexNameMap[nextCountry]]
+            visited[nextTicket]=True
+            ans= dfs(ticketSize,graph,indexNameMap,visited,newRoute,nextCountry)
+            if ans: # ⭐️ def에서 def로 데이터 전달해야 하므로 필요
+                return ans # ⭐️
+            visited[nextTicket]=False
+    return None # ⭐️⭐️
+~~~
+
+
 - bfs
   -  dfs, bfs 둘 다 쓸 수 있으 bfs가 나은 것 같기도?
   - https://www.acmicpc.net/problem/13549 
@@ -238,6 +281,8 @@ def find(x):
       - 따라서 가중치가 0,1 서로 다른 경우는 이를 쓸 것
       - 0-1 bfs의 확장판이 "다익스트라"인 느낌. 여기에 내가 잘 정리해뒀다
       - https://blog.naver.com/inpink_/223359589175
+
+
 
 ***
 

@@ -30,6 +30,7 @@ for i in range(1,n+1): #1~n-1까지 최대 n-1개의 간선 연결, 마지막 �
             if i==n:
                 cycle=True
                 break # ⭐️ 빠른 탐색을 위해 break걸어줄 것
+    #print(dp)
     if cycle: # 뭐 크게 차이는 안나는데
         break
 #print(cycle,dp)

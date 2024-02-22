@@ -155,6 +155,69 @@ head.next=nextNode
 ***
 
 ### [조합]
+- from itertools import combinations
+  - list(combinations(iterable, 요소의길이r))
+    -  combinations('ABCD', 2) --> AB AC AD BC BD CD
+    -  combinations(range(4), 3) --> 012 013 023 123
+    - n개 중 r개를 순서 상관없이 뽑음 (AB==BA 취급)
+
+  - list(combinations_with_replacement(iterable,r))
+    - combinations_with_replacement('ABC', 2) --> AA AB AC BB BC CC
+    - n개 중 r개를 뽑는데 중복 허용, 순서 상관없음  
+
+### [순열]
+- from itertools import permutations
+  - list(permutations(iterable, 요소의길이))
+    - permutations('ABCD', 2) --> AB AC AD BA BC BD CA CB CD DA DB DC
+    - permutations(range(3)) --> 012 021 102 120 201 210
+    - n개 중 r개를 순서 상관있이 뽑음
+  
+  - list(products(iterable, repeat=r))
+    - product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
+    - product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
+    - n개 중 r개를 뽑는데 중복 허용, 순서 상관 있음
+
+
+### [수학]
+- 소수인지 판단
+  - 1) 에라토스테네스의 체
+    - 1부터 max(i)까지 미리 소수 여부를 다 구해놓는 방식
+    - 1은 소수도 아니고, 합성수도 아닌 수이다. l[1]=1 체크
+    - 2부터 시작해서, i의 최댓값까지 다음을 반복한다. l[i]==0이면, i를 제외한 i의 모든 배수에 1을 담는다.
+    -  (시간복잡도 O(max(i) * log2(log2(max(i)))) )
+      - i의 최대값이 1억을 넘는 경우, 시간초과로 이 방법을 쓸 수 없고 2번을 써야 함. ( i의 최댓값 범위만큼 모든 소수를 다 구해놔야 하기 때문 )
+      - i의 최대값이 적당하고, n이 큰 경우 유리하다.
+~~~
+n=1000
+a = [False,False] + [True]*(n-1)
+primes=[]
+
+for i in range(2,n+1):
+  if a[i]:
+    primes.append(i)
+    for j in range(2*i, n+1, i):
+        a[j] = False
+print(primes)
+~~~
+
+
+  - 2) 제곱근 이용
+    - 소수인지 매번 구하는 경우
+    - 시간복잡도 O(n*(i 제곱근))
+    - n의 개수가 많은 경우, "n* i 제곱근"이 1억이 넘지 않도록 주의해야 함.
+~~~
+def isPrime(m): #m이 소수인지 매번 구함
+    if m<=1:
+        return False
+    
+    for i in range(2,int(m**0.5)+1): # ⭐️ 
+        if m%i==0:
+            return False
+        
+    return True
+~~~
+
+- 진수 변환
 
 
 

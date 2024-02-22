@@ -31,6 +31,7 @@ for i in range(tc):
                 if i==n:
                    cycle=True
                    break
+        print(dp)
     #print(dp)
     if cycle:
         print("YES")

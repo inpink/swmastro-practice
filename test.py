@@ -52,3 +52,20 @@ print("All emails:", all_emails)
 
 print(re.match("[a.b]","aa.bb"))
 print(re.findall("[a.b]","aa.bb"))
+
+print(re.match(r"(01)+","0101011"))
+print(re.match(r"^[ㄱ-ㅎ가-힣]+$","안녕"))
+print(re.match(r"^[ㄱ-ㅎ가-힣]+$","안녕1"))
+print(re.match(r"[ㄱ-ㅎ가-힣]+","안녕1"))
+print(re.match(r"[ㄱ-ㅎ가-힣]+","안녕1안녕"))
+print(re.findall(r"[ㄱ-ㅎ가-힣]+","안녕1안녕"))
+print(re.match(r"^[ㄱ-ㅎ가-힣]+$","안녕1"))
+print(re.findall(r"(100+1+|01)+","10011001")) #이상함
+print(re.match(r"(100+1+|01)+","10011001")) #이상함
+print(re.findall(r"^(100+1+|01)+$","10011001"))  #OK
+print(re.match(r"^(100+1+|01)+$","10011001"))  #OK
+print(re.findall(r"^(100+1+|01)+$","1001100101"))  #OK
+print(re.findall(r"(100+1+|01)+","10010111")) #이상함
+
+print(re.match(r"^[\w\.-]+@[\w]+\.[a-zA-Z]+$","ab.-2@gmail.com"))
+print(re.match(r"^[\w\.-]+@[\w]+\.[a-zA-Z]+$","ab.-2@gmail.com@"))

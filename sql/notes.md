@@ -417,9 +417,18 @@ FROM Employees;
 
 ***
 
+정규표현식 REGEXP '식'
+- SELECT column_name FROM table_name WHERE column_name REGEXP 'pattern';
+- 대소문자를 구분하지 않는 검색
+  - SELECT * FROM your_table WHERE LOWER(your_column) REGEXP LOWER('abc');
+- 특정 문자열을 포함하지 않는 행 찾기 => NOT 쓰기
+  - SELECT * FROM your_table WHERE your_column NOT REGEXP 'abc';
+  - a,e,i,o,u로 시작하지 않는 행 찾기
+    - SELECT * FROM your_table WHERE your_column NOT REGEXP '^[aeiou]'
+
+***
+
 정규표현식도 몇 개 외우기
 
 
-
-코테 => 삼성 기출문제도 풀어보기
 플젝 => 크롤러 자동화. 해야겠다. AI 모델엔 안넣더라도 검색은 하잖아.

@@ -33,3 +33,22 @@ for i in range(2,n+1):
         for j in range(2*i, n+1, i):
             a[j] = False
 print(primes)
+
+
+import re
+
+text = "example@gmail.com"
+
+# match() 예시
+if re.match(r".+@gmail\.com", text):
+    print("It matches with match()")
+
+# findall() 예시
+emails = "person1@test.com, person2@gmail.com, person3@yahoo.com"
+all_emails = re.findall(r"[\w\.-]+@[\w\.-]+", emails)
+print("All emails:", all_emails)
+
+
+
+print(re.match("[a.b]","aa.bb"))
+print(re.findall("[a.b]","aa.bb"))

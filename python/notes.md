@@ -651,7 +651,34 @@ emails = "person1@test.com, person2@gmail.com, person3@yahoo.com"
 all_emails = re.findall(r"[\w\.-]+@[\w\.-]+", emails) # 패턴과 일치하는 모든 부분을 찾아 리스트로 반환
 
 ~~~
+![스크린샷 2024-02-23 오후 8.00.14.png](..%2F..%2F..%2F..%2FDesktop%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-02-23%20%EC%98%A4%ED%9B%84%208.00.14.png)
 
+
+***
+
+### [이분탐색]
+~~~
+#이분탐색의 처음과 끝
+start=1 
+end=10**6
+
+while True:
+  if start>end: #★start가 end보다 커지면, 모든 경우를 탐색한 것이라 멈추기
+    break
+  mid=(start+end)//2  #중간값. ★소수점 버림이 된다!!
+  
+  #로직 짜기
+  
+  if 정답조건:
+    break #break 해도 됨
+  elif 어떤 조건이면:
+    start=mid+1  #start를 mid 다음으로 옮겨, 더 큰 값 찾기
+  else:
+    end=mid-1 # end를 mid왼쪽으로.  
+
+#end<start이고 end가 정답이 된다
+print(end) #이분탐색으로 범위를 줄이며 모든 경우를 다 탐색해봤을 때 
+~~~
 
 ***
 

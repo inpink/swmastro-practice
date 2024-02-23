@@ -428,7 +428,8 @@ FROM Employees;
 
 ***
 
-정규표현식도 몇 개 외우기
+https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit
 
+***
 
 플젝 => 크롤러 자동화. 해야겠다. AI 모델엔 안넣더라도 검색은 하잖아.

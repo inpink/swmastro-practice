@@ -13,6 +13,9 @@ A.
 결론적으로, `ON` 절 없이 `JOIN`을 사용하는 것은 특정 유형의 조인(`CROSS JOIN`이나 `NATURAL JOIN`)에 한정되며, 대부분의 경우에는 조인할 테이블 간의 관계를 명확히 정의하기 위해 `ON` 절이나 `USING` 절을 사용하는 것이 좋습니다. 명시적으로 조인 조건을 지정함으로써, 더 명확하고 예측 가능한 쿼리 결과를 얻을 수 있습니다.
 
 
+조인에 특정 조인 조건이 명시되어 있지 않으면, 이는 크로스 조인(cross join)으로 간주된다!!!
+=> A table과 B table의 모든 조합을 만들어냄
+
 ***
 https://school.programmers.co.kr/learn/courses/30/lessons/131123
 Q. GROUP BY는 가장 먼저 나오는 거를 하나 뽑음?
@@ -391,11 +394,30 @@ WHERE A.DepartmentID = B.DepartmentID AND A.EmployeeID <> B.EmployeeID;
 ![img_1.png](img_1.png)
 출처 : https://yeahvely.tistory.com/89
 
+
+- GROUP_CONCAT(열이름) : 열을 하나의 문자로 합친다
+- GROUP_CONCAT(열이름 SEPARATOR '구분자') : 기본 구분자는 ,인데 다른 걸로 바꿈
+- GROUP_CONCAT(열이름 ORDER BY 열이름) : 정렬해서 문자로 합칠수도 있음
+
+
 ***
 
 UNION
 ![img_2.png](img_2.png)
 https://silverji.tistory.com/49
+
+
+
+***
+-- ★ 날짜 차이 구하기 : DATEDIFF(END_DATE, START_DATE)
+-- 또는 다음과 같은 방법으로 다양한 단위 차이 구할 수 있음 TIMESTAMPDIFF(DAY, START_DATE, END_DATE )
+-- -값이 나올 수 있으니까 순서 조심하기!
+-- 날짜 차이 구할 땐, 문제에서 당일을 포함하는지 아닌지 잘 확인하기!
+
+
+-- IF문
+IF(DATEDIFF(END_DATE, START_DATE) + 1>=30,'장기 대여','단기 대여')
+
 
 ***
 
@@ -425,10 +447,71 @@ FROM Employees;
   - SELECT * FROM your_table WHERE your_column NOT REGEXP 'abc';
   - a,e,i,o,u로 시작하지 않는 행 찾기
     - SELECT * FROM your_table WHERE your_column NOT REGEXP '^[aeiou]'
+- AND와 OR 조심하기 (모음으로 시작하는 or 모음으로 끝나는 => 모음으로 시작하고 모음으로 안끝나면 OK 등..)
+
+***
+
+CASE
+WHEN THEN
+ELSE
+END
 
 ***
 
 https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit
+
+***
+
+### WITH : 가상테이블 만들기
+SET @변수명 = 값 은 값 하나만을 담는 변수를 만들었다면 
+WITH는 테이블을 만들 수 있음
+
+크게 2가지 방법으로 사용 가능
+
+1. 단순 테이블 저장 용도로 사용
+~~~
+WITH 가상테이블명 AS (
+    SELECT 0 AS NUM
+    UNION ALL
+    -- 위의 두줄은 선택. 이런식으로 UNION으로 초기값을 정해줄 수도 있음. UNION이니까 AS 당연히 필수. 
+    SELECT 열1,열2 FROM 이미존재하는테이블  -- SELECT 필수
+    -- 여기에 UNION 넣어도 되고 ㅇㅇ WHERE넣어도 되고 JOIN넣어도 되고 자유롭게
+)
+SELECT * FROM 가상테이블명 -- 위의 SELECT문과 동일한 결과
+
+
+WITH TEST AS (
+    SELECT ANIMAL_ID,ANIMAL_TYPE FROM ANIMAL_INS 
+)
+SELECT * FROM TEST
+~~~
+
+2. 반복(재귀)로 사용
+~~~
+WITH RECURSIVE 가상테이블명 AS (
+  SELECT --필수
+  UNION ALL --필수
+  SELECT --필수
+  WHERE --필수
+)
+SELECT * FROM 가상테이블명
+
+WITH RECURSIVE 가상테이블명 AS (
+  SELECT 2 AS NUM  --초기값
+  UNION ALL 
+  SELECT NUM+1 FROM NUMBERS --1씩 늘어난다
+  WHERE NUM<10 -- 재귀 종료 조건 (+1해서 10까지 행에 담김!!!)
+)
+SELECT * FROM 가상테이블명  -- 2부터 10까지 행에 담김
+-- 출력되는 행 이름은 NUM!!!!
+~~~
+=> 일반적인 SELECT와 조금 다르게 봐야함. 재귀이기 때문에 "초기값","종료지점" 등이 정해져 있는 로직
+=> RECURSIVE를 사용한 경우 재귀를 멈춰주기 위해 필수 조건들이 붙는다
+
+
+https://www.hackerrank.com/challenges/print-prime-numbers/problem?isFullScreen=true
+=> 재귀를 이용해서 ""SQL에서 소수""뽑기!!
+
 
 ***
 

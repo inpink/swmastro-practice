@@ -69,3 +69,11 @@ print(re.findall(r"(100+1+|01)+","10010111")) #이상함
 
 print(re.match(r"^[\w\.-]+@[\w]+\.[a-zA-Z]+$","ab.-2@gmail.com"))
 print(re.match(r"^[\w\.-]+@[\w]+\.[a-zA-Z]+$","ab.-2@gmail.com@"))
+
+dic={1:2,3:4}
+print(dic.values())
+print(dic.items())
+print(sorted(dic.keys()))
+
+print(re.split(r"[+-]","55-50+40"))
+print(re.findall(r"[+-]","55-50+40"))

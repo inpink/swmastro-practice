@@ -457,6 +457,11 @@ ELSE
 END
 
 ***
+소문자로 lower() 
+대문자로 upper()
+
+
+***
 
 https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit
 

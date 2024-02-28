@@ -77,3 +77,7 @@ print(sorted(dic.keys()))
 
 print(re.split(r"[+-]","55-50+40"))
 print(re.findall(r"[+-]","55-50+40"))
+print(sum([]))
+
+a=[1,2,3,4,5]
+print(a[:4])

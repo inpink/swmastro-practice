@@ -81,3 +81,14 @@ print(sum([]))
 
 a=[1,2,3,4,5]
 print(a[:4])
+
+from collections import deque
+
+a=deque([1,2,3])
+b=deque(a)
+b.popleft()
+print(a,b)
+
+b.reverse()
+print(b)
+print("".join(deque(["1","2"])))

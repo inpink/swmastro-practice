@@ -96,3 +96,6 @@ print("".join(deque(["1","2"])))
 from itertools import product
 
 print(list(product(range(0,4),repeat=7)))
+
+import math
+print(math.log(5000000,2))

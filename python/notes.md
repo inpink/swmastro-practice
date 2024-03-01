@@ -402,11 +402,20 @@ def dfs(ticketSize,graph,indexNameMap,visited,route,curCountry): #dfs 백트래�
             visited[nextTicket]=False
     return None # ⭐️⭐️
 ~~~
-
-
+  - 백트래킹 주의점!!! dfs를 호출하는 곳이 하나가 아니다! dfs 호출하는 전후에서 모두 visited 초기화 시켜줘야함!!
+  - dfs호출하는 전 부분에서 visited를 초기화시켜줘야 하는지 꼭 한번 생각하기!!
+  - ⭐️⭐itertools로 모든 경우를 brute force 하기 전에, ⭐앞쪽에서 겹치는 요소들⭐️이 있는 경우 백트래킹을 꼭 생각해보자!!!!
+    (시간 절약을 할 수 있다. 코드 짜는 시간의 효율은 생각해봐야겠지만)
+  - abc를 bruteforce로 만들면 a연산 b연산 c연산을 해야하지만 backtracking으로 하면 ab연산은 앞에서 했고 c연산만 해주면 되니까 시간 아끼는것임
+    - 전체에서 아끼는 총 시간은, bruteforce 연산횟수 - abcdef를 만들때 연산횟수로 계산하면 됨
+    - 각 알파벳연산이 2500회라고 할때
+    - abcdef bruteforce 시간복잡도 : 2500*6*6!
+    - abcdef backtracking = 2600*6*6! - (2500*(6-2)*3*4*..*6)
+    - 즉, n>=3일때부터 백트래킹이 줄어드는 효과있음
+    - ![img_1.png](img_1.png)
 - bfs
   -  dfs, bfs 둘 다 쓸 수 있으 bfs가 나은 것 같기도?
-  - https://www.acmicpc.net/problem/13549 
+  - https:/g/www.acmicpc.net/problem/13549 
     -  "0-1 bfs"
       -  bfs는 모든 간선의 가중치가 같은 경우에만 가능하다.
       - visited를 쓰기 때문이다. 

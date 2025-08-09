@@ -894,6 +894,7 @@ hanoi(n, 1, 2, 3)
 - 전위, 중위, 후위 표기식 -> 재귀 생각하기
 - "분할 정복" 항상 함께 생각하기
 
+***
 
 ### [EOF]
 프로그래머스에서는 안나오는 유형이긴함
@@ -904,6 +905,54 @@ while True:
     except EOFError:
         break
 ~~~
+
+***
+
+### [날짜]
+https://www.acmicpc.net/problem/2730(오늘은 OS 숙제 제출일)
+~~~
+from datetime import date
+
+# 두 날짜 지정
+date1 = date(2025, 8, 10)
+date2 = date(2025, 7, 25)
+
+# 날짜 차이 계산
+diff = date1 - date2
+
+print(diff.days)  # 16
+~~~
+- date 사용 시, (2025, 2, 29)와 같이 없는 날짜를 넣으면 ValueError발생함. 
+
+- 옳은 날짜인지 검증
+~~~
+import calendar
+
+def is_valid_date(year, month, day):
+    # 월 범위 체크
+    if not (1 <= month <= 12):
+        return False
+    # 해당 월의 마지막 날 확인
+    last_day = calendar.monthrange(year, month)[1]
+    return 1 <= day <= last_day
+~~~
+
+
+- 윤년인지
+~~~
+def is_leap_year(year): #⭐️
+  return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+
+def is_valid_date(year,month,day):
+  if month==2 and day==29:
+    if is_leap_year(year):
+      return True
+    else:
+      return False
+  return True
+~~~
+=> 위 2730문제에서, month와 day는 적절한데 year가 달라질 수 있었어서, """윤년만 없는 date가 발생 가능했었음. 그래서 위와 같이 검증함""" 
+
 
 ***
 
@@ -961,5 +1010,8 @@ while True:
    변수 선언, IF, NOW(), SELF JOIN/SUB QUERY 매우 복잡하게
 
 => 1.5솔 컷 추정 
+
+
+
 
 
